@@ -1,4 +1,4 @@
-//go:build linux || freebsd
+//go:build linux || freebsd || loong64
 
 package fs
 
