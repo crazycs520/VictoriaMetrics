@@ -958,10 +958,11 @@ func (tb *Table) mustMergeInmemoryParts(pws []*partWrapper) []*partWrapper {
 			}()
 
 			pw := tb.mustMergeInmemoryPartsFinal(pwsChunk)
-
-			pwsResultLock.Lock()
-			pwsResult = append(pwsResult, pw)
-			pwsResultLock.Unlock()
+			if pw != nil {
+				pwsResultLock.Lock()
+				pwsResult = append(pwsResult, pw)
+				pwsResultLock.Unlock()
+			}
 		}(pwsToMerge)
 		pws = pwsRemaining
 	}
@@ -1041,7 +1042,8 @@ func (tb *Table) mustMergeIntoInmemoryPart(bsrs []*blockStreamReader, flushToDis
 		putBlockStreamReader(bsr)
 	}
 	if err != nil {
-		logger.Panicf("FATAL: cannot merge inmemoryBlocks: %s", err)
+		//logger.Panicf("FATAL: cannot merge inmemoryBlocks: %s", err)
+		return nil
 	}
 	mpDst.ph = *ph
 
