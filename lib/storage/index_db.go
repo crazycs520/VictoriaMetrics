@@ -1935,9 +1935,9 @@ func (is *indexSearch) getTSIDByMetricNameNoExtDB(dst *TSID, metricName []byte, 
 		// Found valid dst.
 		return true
 	}
-	if err := ts.Error(); err != nil {
-		logger.Panicf("FATAL: error when searching TSID by metricName; searchPrefix %q: %s", kb.B, err)
-	}
+	//if err := ts.Error(); err != nil {
+	//	logger.Panicf("FATAL: error when searching TSID by metricName; searchPrefix %q: %s", kb.B, err)
+	//}
 	// Nothing found
 	return false
 }
