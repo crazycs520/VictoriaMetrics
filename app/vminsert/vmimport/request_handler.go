@@ -1,6 +1,7 @@
 package vmimport
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -34,7 +35,13 @@ func InsertHandler(req *http.Request) error {
 	})
 }
 
-func insertRows(rows []vmimport.Row, extraLabels []prompbmarshal.Label) error {
+func insertRows(rows []vmimport.Row, extraLabels []prompbmarshal.Label) (err error) {
+	defer func() {
+		err1 := recover()
+		if err1 != nil {
+			err = fmt.Errorf("panic when insertRows: %v", err1)
+		}
+	}()
 	ctx := getPushCtx()
 	defer putPushCtx(ctx)
 
@@ -69,7 +76,7 @@ func insertRows(rows []vmimport.Row, extraLabels []prompbmarshal.Label) error {
 		}
 		for j, value := range values {
 			timestamp := timestamps[j]
-			if err := ic.WriteDataPoint(ctx.metricNameBuf, nil, timestamp, value); err != nil {
+			if err = ic.WriteDataPoint(ctx.metricNameBuf, nil, timestamp, value); err != nil {
 				return err
 			}
 		}
