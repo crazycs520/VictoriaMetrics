@@ -1,4 +1,4 @@
-//go:build linux || darwin || freebsd || loong64
+//go:build linux || darwin || freebsd
 
 package fs
 
